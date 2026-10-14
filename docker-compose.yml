@@ -1,0 +1,18 @@
+
+services:
+  estoqui-postgres:
+    image: postgres:18
+    container_name: estoqui-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: estoqui_user
+      POSTGRES_PASSWORD: estoqui_dev_password
+      POSTGRES_DB: estoqui
+    ports:
+      - "5433:5432"
+    volumes:
+      - estoqui_postgres_data:/var/lib/postgresql
+
+volumes:
+  estoqui_postgres_data:
+
