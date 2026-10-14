@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Geist } from "next/font/google";
 
 import "./globals.css";
 import Sidebar from "./_components/sidebar";
+import { cn } from "@/app/_lib/utils";
+
+const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
 export const metadata: Metadata = {
   title: "Estoqui",
@@ -16,7 +19,7 @@ const inter = Inter({
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="pt-BR" className="h-full">
+    <html lang="pt-BR" className={cn("h-full", "font-sans", geist.variable)}>
       <body
         className={`${inter.className} min-h-full bg-background text-foreground antialiased`}
         suppressHydrationWarning
