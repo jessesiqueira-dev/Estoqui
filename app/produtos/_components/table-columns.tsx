@@ -1,53 +1,53 @@
 "use client";
 
 import { Badge } from "@/app/_components/ui/badge";
-import type { Product as PrismaProduct } from "@/app/generated/prisma/client";
-import type { LegacyColumnDef } from "@tanstack/react-table/legacy";
+import { dataTableFeatures } from "@/app/_components/ui/data-table-config";
+import type { Product } from "@/app/generated/prisma/client";
+import { createColumnHelper } from "@tanstack/react-table";
 import { CircleIcon } from "lucide-react";
 
-export type ProductTableRow = Omit<PrismaProduct, "price"> & {
-  price: number;
-  status: "IN_STOCK" | "OUT_OF_STOCK";
+type ProductTableRow = Pick<Product, "id" | "name" | "stock"> & {
+  price: string;
 };
 
-const getStatusLabel = (status: string) => {
-  if (status === "IN_STOCK") {
-    return "Em estoque";
-  }
-  return "Fora de estoque";
-};
+const columnHelper =
+  createColumnHelper<typeof dataTableFeatures, ProductTableRow>();
 
-export const productTableColumns: LegacyColumnDef<ProductTableRow>[] = [
-  {
-    accessorKey: "name",
+
+
+export const productTableColumns = columnHelper.columns([
+  columnHelper.accessor("name", {
     header: "Produto",
-  },
-  {
-    accessorKey: "price",
+  }),
+  columnHelper.accessor("price", {
     header: "Valor unitário",
-  },
-  {
-    accessorKey: "stock",
+  }),
+  columnHelper.accessor("stock", {
     header: "Estoque",
-  },
-  {
-    accessorKey: "status",
+  }),
+  columnHelper.display({
+    id: "status",
     header: "Status",
     cell: ({ row }) => {
-      const product = row.original;
-      const label = getStatusLabel(product.status);
+      const inStock = row.original.stock > 0;
+      const label = inStock ? "Em estoque" : "Fora de estoque";
+
       return (
         <Badge
-          variant={label === "Em estoque" ? "default" : "outline"}
+          variant={inStock ? "default" : "outline"}
           className="gap-1.5"
         >
           <CircleIcon
             size={14}
-            className={`${label === "Em estoque" ? "fill-primary-foreground" : "fill-destructive-foreground"}`}
+            className={
+              inStock
+                ? "fill-primary-foreground"
+                : "fill-destructive-foreground"
+            }
           />
           {label}
         </Badge>
       );
     },
-  },
-];
+  }),
+]);

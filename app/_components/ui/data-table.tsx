@@ -1,13 +1,9 @@
 "use client";
 
-import { flexRender } from "@tanstack/react-table";
-import {
-  LegacyColumnDef,
-  getCoreRowModel,
-  useLegacyTable,
-} from "@tanstack/react-table/legacy";
+import { flexRender, useTable, type ColumnDef } from "@tanstack/react-table";
 import type { RowData } from "@tanstack/table-core";
 
+import { dataTableFeatures } from "./data-table-config";
 import {
   Table,
   TableBody,
@@ -18,7 +14,7 @@ import {
 } from "./table";
 
 interface DataTableProps<TData extends RowData> {
-  columns: LegacyColumnDef<TData>[];
+  columns: ColumnDef<typeof dataTableFeatures, TData>[];
   data: TData[];
 }
 
@@ -26,10 +22,10 @@ export function DataTable<TData extends RowData>({
   columns,
   data,
 }: DataTableProps<TData>) {
-  const table = useLegacyTable({
-    data,
+  const table = useTable({
+    features: dataTableFeatures,
     columns,
-    getCoreRowModel: getCoreRowModel(),
+    data,
   });
 
   return (
@@ -38,31 +34,33 @@ export function DataTable<TData extends RowData>({
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
-              {headerGroup.headers.map((header) => {
-                return (
-                  <TableHead key={header.id}>
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext(),
-                        )}
-                  </TableHead>
-                );
-              })}
+              {headerGroup.headers.map((header) => (
+                <TableHead key={header.id}>
+                  {header.isPlaceholder
+                    ? null
+                    : flexRender(
+                        header.column.columnDef.header,
+                        header.getContext(),
+                      )}
+                </TableHead>
+              ))}
             </TableRow>
           ))}
         </TableHeader>
+
         <TableBody>
-          {table.getRowModel().rows?.length ? (
+          {table.getRowModel().rows.length > 0 ? (
             table.getRowModel().rows.map((row) => (
               <TableRow
                 key={row.id}
-                data-state={row.getIsSelected() && "selected"}
+                data-state={row.getIsSelected() ? "selected" : undefined}
               >
                 {row.getVisibleCells().map((cell) => (
                   <TableCell key={cell.id}>
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                    {flexRender(
+                      cell.column.columnDef.cell,
+                      cell.getContext(),
+                    )}
                   </TableCell>
                 ))}
               </TableRow>
