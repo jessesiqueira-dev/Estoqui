@@ -10,7 +10,7 @@ const Sidebar = () => {
   return (
     <div className="min-h-screen w-64 shrink-0 border-r border-sidebar-border bg-sidebar text-sidebar-foreground">
       <div className="px-6 py-6">
-        <h1 className="text-xl font-bold tracking-wide text-primary">ESTOQUI</h1>
+        <h1 className="text-3xl font-bold tracking-wide text-primary">ESTOQUI</h1>
       </div>
 
       <nav className="flex flex-col gap-1 px-2">
