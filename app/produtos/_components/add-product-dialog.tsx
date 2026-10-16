@@ -1,7 +1,7 @@
 "use client";
 
 import { useActionState, useCallback, useEffect, useState } from "react";
-import { PlusIcon } from "lucide-react";
+import { LoaderCircle, PlusIcon } from "lucide-react";
 import { Button } from "@/app/_components/ui/button";
 import {
   Dialog,
@@ -100,7 +100,14 @@ function ProductForm({ onCreated }: { onCreated: () => void }) {
           </Button>
         </DialogClose>
         <Button type="submit" disabled={pending}>
-          {pending ? "Salvando..." : "Salvar produto"}
+          {pending ? (
+            <>
+              <LoaderCircle className="animate-spin" aria-hidden="true" />
+              Salvando...
+            </>
+          ) : (
+            "Salvar produto"
+          )}
         </Button>
       </DialogFooter>
     </form>
