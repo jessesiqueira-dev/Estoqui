@@ -19,12 +19,12 @@ const Sidebar = () => {
           Dashboard
         </SidebarButton>
 
-        <SidebarButton href="/produtos">
+        <SidebarButton href="/products">
           <PackageIcon size={20} />
           Produtos
         </SidebarButton>
 
-        <SidebarButton href="/vendas">
+        <SidebarButton href="/sales">
           <ShoppingBasketIcon size={20} />
           Vendas
         </SidebarButton>

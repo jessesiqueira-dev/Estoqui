@@ -1,9 +1,9 @@
 
 import { Suspense } from "react";
 import { DataTable } from "../_components/ui/data-table";
-import { getProducts } from "../_data-acess/product/get-products";
+import { getProducts } from "../_data-access/product/get-products";
 import { productTableColumns } from "./_components/table-columns";
-import { AddProductDialog } from "./_components/add-product-dialog";
+import { CreateProductButton } from "./_components/create-product-button";
 
 const ProductsTable = async () => {
   const products = await getProducts();
@@ -37,7 +37,7 @@ const ProductsPage = () => {
             <h1 className="text-xl font-semibold">Gestão de produtos</h1>
           </div>
 
-          <AddProductDialog />
+          <CreateProductButton />
         </div>
 
         <Suspense

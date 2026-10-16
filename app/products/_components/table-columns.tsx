@@ -5,6 +5,7 @@ import { dataTableFeatures } from "@/app/_components/ui/data-table-config";
 import type { Product } from "@/app/generated/prisma/client";
 import { createColumnHelper } from "@tanstack/react-table";
 import { CircleIcon } from "lucide-react";
+import { ProductActions } from "./table-dropdown-menu";
 
 type ProductTableRow = Pick<Product, "id" | "name" | "stock"> & {
   price: string;
@@ -53,5 +54,10 @@ export const productTableColumns = columnHelper.columns([
         </Badge>
       );
     },
+  }),
+  columnHelper.display({
+    id: "actions",
+    header: "Ações",
+    cell: ({ row }) => <ProductActions product={{ ...row.original, price: row.original.price }} />,
   }),
 ]);
