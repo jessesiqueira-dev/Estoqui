@@ -29,9 +29,9 @@ export function DataTable<TData extends RowData>({
   });
 
   return (
-    <div className="rounded-md border">
+    <div className="overflow-hidden rounded-lg border border-border bg-card">
       <Table>
-        <TableHeader>
+        <TableHeader className="bg-muted">
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => (

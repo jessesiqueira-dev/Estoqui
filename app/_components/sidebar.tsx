@@ -8,12 +8,12 @@ import SidebarButton from "./sidebar-button";
 
 const Sidebar = () => {
   return (
-    <div className="w-64 bg-white">
-      <div className="px-8 py-6">
-        <h1 className="text-2xl font-bold">ESTOQUI</h1>
+    <div className="min-h-screen w-64 shrink-0 border-r border-sidebar-border bg-sidebar text-sidebar-foreground">
+      <div className="px-6 py-6">
+        <h1 className="text-xl font-bold tracking-wide text-primary">ESTOQUI</h1>
       </div>
 
-      <nav className="flex flex-col gap-2 p-2">
+      <nav className="flex flex-col gap-1 px-2">
         <SidebarButton href="/">
           <LayoutGridIcon size={20} />
           Dashboard

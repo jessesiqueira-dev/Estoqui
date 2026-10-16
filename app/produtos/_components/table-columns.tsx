@@ -30,19 +30,23 @@ export const productTableColumns = columnHelper.columns([
     header: "Status",
     cell: ({ row }) => {
       const inStock = row.original.stock > 0;
-      const label = inStock ? "Em estoque" : "Fora de estoque";
+      const label = inStock ? "Em estoque" : "Esgotado";
 
       return (
         <Badge
-          variant={inStock ? "default" : "outline"}
-          className="gap-1.5"
+          variant={inStock ? "secondary" : "outline"}
+          className={
+            inStock
+              ? "gap-1.5 border-transparent"
+              : "gap-1.5 border-transparent bg-muted text-muted-foreground"
+          }
         >
           <CircleIcon
             size={14}
             className={
               inStock
-                ? "fill-primary-foreground"
-                : "fill-destructive-foreground"
+                ? "fill-primary text-primary"
+                : "fill-muted-foreground text-muted-foreground"
             }
           />
           {label}

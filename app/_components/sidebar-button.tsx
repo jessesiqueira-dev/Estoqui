@@ -13,14 +13,18 @@ interface SidebarButtonProps {
 
 const SidebarButton = ({ href, children }: SidebarButtonProps) => {
   const pathname = usePathname();
+  const isActive =
+    pathname === href || (href !== "/" && pathname.startsWith(`${href}/`));
 
   return (
     <Button
-      variant={pathname === href ? "secondary" : "ghost"}
-      className="justify-start gap-2"
+      variant={isActive ? "secondary" : "ghost"}
+      className={`h-11 w-full justify-start gap-3 px-3 ${isActive ? "font-semibold" : "text-muted-foreground"}`}
       asChild
     >
-      <Link href={href}>{children}</Link>
+      <Link href={href} aria-current={isActive ? "page" : undefined}>
+        {children}
+      </Link>
     </Button>
   );
 };
