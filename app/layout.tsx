@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import "./globals.css";
 import Sidebar from "./_components/sidebar";
+import { Toaster } from "./_components/ui/toaster";
 
 export const metadata: Metadata = {
   title: "Estoqui",
@@ -29,6 +30,7 @@ export default function RootLayout({
           </Suspense>
           {children}
         </div>
+        <Toaster />
       </body>
     </html>
   );

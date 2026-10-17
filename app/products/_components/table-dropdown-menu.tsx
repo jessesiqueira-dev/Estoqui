@@ -19,6 +19,16 @@ import {
   type UpsertProductInput,
 } from "@/app/_actions/product/upsert-product/schema";
 import { Button } from "@/app/_components/ui/button";
+import { showToast } from "@/app/_components/ui/toaster";
+import {
+  AlertDialog,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/app/_components/ui/alert-dialog";
 import {
   Dialog,
   DialogContent,
@@ -38,6 +48,7 @@ type ProductRow = { id: string; name: string; price: string; stock: number };
 
 export function ProductActions({ product }: { product: ProductRow }) {
   const [open, setOpen] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
   const [removeError, setRemoveError] = useState("");
   const [copyStatus, setCopyStatus] = useState("");
   const router = useRouter();
@@ -59,6 +70,11 @@ export function ProductActions({ product }: { product: ProductRow }) {
   const remove = useAction(deleteProductAction, {
     onSuccess: () => {
       setRemoveError("");
+      setDeleteOpen(false);
+      showToast({
+        title: "Produto excluído com sucesso",
+        description: `${product.name} foi removido do estoque.`,
+      });
       router.refresh();
     },
     onError: ({ error }) =>
@@ -88,14 +104,9 @@ export function ProductActions({ product }: { product: ProductRow }) {
     window.setTimeout(() => setCopyStatus(""), 2000);
   };
 
-  const deleteProduct = () => {
-    if (
-      window.confirm(
-        `Excluir ${product.name}? Produtos que aparecem em vendas registradas não podem ser excluídos.`,
-      )
-    ) {
-      remove.execute({ id: product.id });
-    }
+  const requestDelete = () => {
+    setRemoveError("");
+    setDeleteOpen(true);
   };
 
   return (
@@ -129,13 +140,52 @@ export function ProductActions({ product }: { product: ProductRow }) {
           <DropdownMenuItem
             className="gap-3 px-3 py-2.5 text-sm"
             variant="destructive"
-            onSelect={deleteProduct}
+            onSelect={requestDelete}
           >
             <Trash2 size={18} />
             Excluir
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
+
+      <AlertDialog
+        open={deleteOpen}
+        onOpenChange={(nextOpen) => {
+          if (!remove.isExecuting) setDeleteOpen(nextOpen);
+        }}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Excluir produto?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Tem certeza que deseja excluir <strong>{product.name}</strong>?
+              Essa ação não pode ser desfeita. Produtos que aparecem em vendas
+              registradas não podem ser excluídos.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          {removeError && (
+            <p className="text-sm text-destructive" role="alert">
+              {removeError}
+            </p>
+          )}
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={remove.isExecuting}>
+              Cancelar
+            </AlertDialogCancel>
+            <Button
+              variant="destructive"
+              disabled={remove.isExecuting}
+              onClick={() => remove.execute({ id: product.id })}
+            >
+              {remove.isExecuting ? (
+                <LoaderCircle className="animate-spin" />
+              ) : (
+                "Excluir produto"
+              )}
+            </Button>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
 
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent>
@@ -202,11 +252,6 @@ export function ProductActions({ product }: { product: ProductRow }) {
         </DialogContent>
       </Dialog>
 
-      {removeError && (
-        <span className="max-w-40 text-xs text-destructive" role="alert">
-          {removeError}
-        </span>
-      )}
       <span className="sr-only" role="status" aria-live="polite">
         {copyStatus}
       </span>
